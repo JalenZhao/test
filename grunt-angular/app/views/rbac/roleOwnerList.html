@@ -1,0 +1,64 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>角色用户列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">权限中心</a></li>
+          <li><a href="#">角色管理</a></li>
+          <li class="active">角色用户列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <button class="btn btn-primary pull-right" ng-click="back()">返回</button>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered" id="rbacUserTable">
+                                <thead>
+                                    <th class="text-center">序号</th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>角色</th>
+                                    <th>部门</th>
+                                    <th>状态</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr ng-repeat="row in data">
+                                        <td class="col-sm-2 text-center">{{$index+1}}</td>
+                                        <td class="col-sm-2">{{ row.name }}</td>
+                                        <td class="col-sm-2">{{ row.cn }}</td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.roleids == undefined">
+                                                未分配角色
+                                            </span>
+                                            <ul ng-show="row.roleids != undefined">
+                                                <li ng-repeat="item in row.roleids.split(',')">{{roles[item].role_name}}</li>
+                                            </ul>
+                                        </td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.group_id==-1">
+                                                未分配组
+                                            </span>
+                                            <span ng-show="row.group_id!=-1">
+                                                {{ groups[row.group_id].name }}
+                                            </span>
+                                        </td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.flag == 0">禁用</span>
+                                            <span ng-show="row.flag == 1">启用</span>
+                                            <span ng-show="row.flag == 2">启用</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

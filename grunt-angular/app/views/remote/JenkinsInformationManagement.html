@@ -1,0 +1,137 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>信息管理</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">远程管理中心</a></li>
+            <li><a href="#">Jenkins</a></li>
+            <li class="active">信息管理</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li>
+                                    <a href="" id="addButton" data-toggle="modal" data-target="#addModal" ng-click="add()"><i class="fa fa-plus"></i>新增</a>
+                                </li>
+                                <li class="input-group col-sm-3 pull-right">
+                                    <input type="text" class="form-control" placeholder="keyword">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <th class="text-center">序号</th>
+                                    <th>区域主</th>
+                                    <th>区域分</th>
+                                    <th>名称</th>
+                                    <th class="col-sm-3">地址</th>
+                                    <th>备注</th>
+                                    <th>操作</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr ng-repeat="item in data" ng-if="loadingSwitch">
+                                        <td ng-bind="$index+1" class="text-center"></td>
+                                        <td ng-bind="item.regional_master"></td>
+                                        <td ng-bind="item.regional_division"></td>
+                                        <td ng-bind="item.name"></td>
+                                        <td class="col-sm-3" ng-bind="item.address"></td>
+                                        <td ng-bind="item.remark"></td>
+                                        <td>
+                                            <a href="" id="editButton" data-toggle="modal" data-target="#addModal" ng-click="edit(item)">编辑</a>&nbsp;&nbsp;
+                                            <a href="" id="delButton" data-toggle="modal" data-target="#delModal" ng-click="delete(item)">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+<!-- addModal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="addModal1" class="col-sm-2 control-label">区域</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control text-center" id="addModal1" placeholder="区域">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addModal2" class="col-sm-2 control-label">名字</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control text-center" id="addModal2" placeholder="名字" ng-model="information.name">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addModal3" class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control text-center" id="addModal3" placeholder="地址" ng-model="information.address">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addModal4" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control text-center" id="addModal4" placeholder="默认NULL" ng-model="information.username">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                    	<label for="addModal5" class="col-sm-2 control-label">密码</label>
+                    	<div class="col-sm-8">
+                    		<input type="password" class="form-control text-center" id="addModal5" placeholder="默认NULL" ng-model="information.pwd">
+                    	</div>
+                    </div>
+                    <div class="form-group">
+                    	<label for="addModal6" class="col-sm-2 control-label">备注</label>
+                    	<div class="col-sm-8">
+                    		<textarea id="addModal6" class="col-sm-12" ng-model="information.remark"></textarea>
+                    	</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="updata(information.id)">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delModal -->
+<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"> 删除Jenkins地址</h4>
+            </div>
+            <div class="modal-body">
+                <h5>是否确认删除出:</h5>
+                <p class="text-center">{{information.address}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteUpdata(information.id)">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

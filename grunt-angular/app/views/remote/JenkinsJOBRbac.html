@@ -1,0 +1,75 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>JOB权限分配</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">远程管理中心</a></li>
+            <li><a href="#">Jenkins</a></li>
+            <li class="active">JOB权限分配</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                        	<div class="col-sm-4">
+                        		<form class="form-horizontal">
+								  	<div class="form-group">
+									    <label for="label1" class="col-sm-4 control-label">区域主:</label>
+									    <div class="col-sm-8">
+			                                <select id="label1" class="form-control" ng-change="change()" ng-model="aaa">
+			                                	<option>红山机房</option>
+			                                	<option>石桥机房</option>
+			                                </select>
+									    </div>
+								  	</div>
+								</form>
+                        	</div>
+                        	<div col-sm-2></div>
+                        	<div class="col-sm-4">
+                        		<form class="form-horizontal">
+								  	<div class="form-group">
+									    <label for="label1" class="col-sm-4 control-label">区域分:</label>
+									    <div class="col-sm-8">
+			                                <select id="label1" class="form-control" ng-change="change()" ng-model="bbb">
+			                                	<option>生产区</option>
+			                                	<option>开发区</option>
+			                                	<option>质测区</option>
+			                                </select>
+									    </div>
+								  	</div>
+								</form>
+                        	</div>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <th class="text-center">序号</th>
+                                    <th class="col-sm-3">任务名</th>
+                                    <th>所有者</th>
+                                    <th>权限分配</th>
+                                    <th>创建日期</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr ng-repeat="item in data" ng-if="loadingSwitch">
+                                        <td ng-bind="$index+1" class="text-center"></td>
+                                        <td ng-bind="item.taskname" class="col-sm-3"></td>
+                                        <td>
+                                        	<span style="margin-right: 10px;" ng-repeat="item2 in item.owner" ng-bind="item2.name"></span>
+                                        </td>
+                                        <td>
+                                        	<a href="">权限分配</a>&nbsp;&nbsp;
+                                        </td>
+                                        <td ng-bind="item.date |  date : 'yyyy-MM-dd'"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

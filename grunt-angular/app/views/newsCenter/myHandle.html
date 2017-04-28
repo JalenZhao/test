@@ -1,0 +1,83 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>我的待处理-处理</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">消息中心</a></li>
+            <li><a href="#">我的消息</a></li>
+            <li class="active">我的待处理</li>
+        </ol>
+        <section class="content myHandle">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box" id="internetApplication">
+                        <div class="box-header">
+                        	<a href="" class="btn btn-primary pull-right ml20" ng-click="back()"><i class="fa fa-reply"></i>&nbsp;返回</a>
+                        </div>
+                        <div class="box-body">
+                        	<form class="form-horizontal">
+                        		<div class="appliction_box" ng-repeat="item in data">
+								  	<div class="row">
+								  		<span class="col-sm-3">
+									  		<label for="environment">环境</label>
+									  		<select id="environment" class="plr10" ng-model="item.env" disabled>
+									  			<option value="0" ng-selected="item.env == 0">请选择</option>
+									        	<option value="1" ng-selected="item.env == 1">红山开发区</option>
+									        	<option value="2" ng-selected="item.env == 2">红山生产区</option>
+									        	<option value="2" ng-selected="item.env == 3">红山质测区</option>
+									        	<option value="4" ng-selected="item.env == 4">石桥开发区</option>
+									        	<option value="5" ng-selected="item.env == 5">石桥生产区</option>
+									  		</select>
+								  		</span>
+								  		<span class="col-sm-4">
+								  			<input type="text" name="inIp" placeholder="内网IP" class="ip w120" ng-model="item.in_ip" disabled>
+									  		<input type="text" name="inIp_port" placeholder="端口" class="plr10 w70" ng-model="item.in_port" disabled maxlength="5">
+									  		<input type="checkbox" name="inIp_port_anything" ng-model="item.no_in_port" disabled>端口不限
+								  		</span>
+								  		<span class="col-sm-5">
+								  			<input type="text" name="outIp" placeholder="外网IP" class="plr10 w120" ng-model="item.out_ip" disabled>
+									  		<input type="checkbox" name="outIp_port_auto" ng-model="item.no_out_ip" disabled>网工分配
+									  		<input type="text" name="outIp_port" placeholder="端口" class="plr10 w70" ng-model="item.out_port" disabled maxlength="5">
+									  		<input type="checkbox" name="outIp_port_anything" ng-model="item.no_out_port" disabled>端口不限
+								  		</span>
+								  	</div>
+                        		</div>
+							</form>
+							<div class="result-box">
+								<div class="result-box-header">
+									<!-- <h4>审批信息</h4> -->
+								</div>
+								<div class="result-box-body">
+									 <textarea style="width: 100%; height: 150px;" placeholder="必填：批语" ng-model="handleMessage"></textarea>
+								</div>
+							</div>
+                        </div>
+                        <div class="box-footer text-center">
+                        	<a href="" class="btn btn-primary pull-left" ng-click="handle('通过')"><i class="fa fa-check"></i>&nbsp;审批通过</a>
+                        	<!-- <a href="" class="btn btn-success" ng-click="handle('转给其他人')"><i class="fa fa-exchange"></i>&nbsp;转发给其他人</a> -->
+                        	<a href="" class="btn btn-danger pull-right" ng-click="handle('驳回')"><i class="fa fa-close"></i>&nbsp;驳回</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog  modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+      </div>
+      <div class="modal-body text-center text-success">
+        {{ message }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

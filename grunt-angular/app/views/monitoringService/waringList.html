@@ -1,0 +1,47 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>告警列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">监控服务</a></li>
+          <li>24小时监控</li>
+          <li class="active">告警列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header"></div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th>站点</th>
+                                    <th>IP</th>
+                                    <th class="col-sm-2">问题描述</th>
+                                    <th>等级</th>
+                                    <th>时间</th>
+                                    <th>组</th>
+                                    <th>时间flag</th>
+                                    <th>新</th>
+                                </thead>
+                                <tbody>
+                                    <!-- <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch"> -->
+                                    <tr ng-repeat="item in [1,2,3,4,5,6,7,8,9,10]">
+                                    	<td>红山物理机监控</td>
+                                    	<td>172.23.242.205</td>
+                                    	<td>A104-主机信息发生改变-HOSTNAME</td>
+                                    	<td>一般</td>
+                                    	<td>2017-04-27 15:10:39</td>
+                                    	<td>OPENSTACK;</td>
+                                        <td>2017-04-27 15:11:30</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

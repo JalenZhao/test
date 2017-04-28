@@ -1,0 +1,56 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>我的待处理</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">消息中心</a></li>
+            <li><a href="#">我的消息</a></li>
+            <li class="active">我的待处理</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li class="input-group col-sm-3 pull-right">
+                                    <input type="text" class="form-control" placeholder="可搜索类别、内容关键字" ng-model="keyword">
+                                    <div class="input-group-addon" ng-click="search()"><span class="glyphicon glyphicon-search"></span></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th class="col-sm-2">申请人</th>
+                                    <th>申请时间</th>
+                                    <th>申请类别</th>
+                                    <th>申请内容</th>
+                                    <th>处理状态</th>
+                                    <th class="col-sm-2">操作</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr ng-repeat="row in data" ng-if="loadingSwitch">
+                                        <td>{{ row.name}}</td>
+                                        <td>{{ row.create_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                        <td>{{ row.category}}</td>
+                                        <td>{{ row.appli_name }}</td>
+                                        <td>待处理</td>
+                                        <td>
+                                        	<a href="" ng-click="gohandle(row.form_data_id,row.taskId)">处理</a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="data.length == 0">
+                                        <td colspan="6" class="no_myPending" ng-bind="message"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

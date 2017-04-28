@@ -1,0 +1,55 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>监控列表</h1>
+        <ol class="breadcrumb pull-right">
+        	<li>监控服务</li>
+          	<li>24小时监控</li>
+          	<li class="active">监控列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li class="input-group col-sm-3 pull-right">
+                                    <input type="text" class="form-control" placeholder="keyword" ng-model="keyword">
+                                    <div class="input-group-addon" ng-click="search()"><span class="glyphicon glyphicon-search"></span></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th>站点</th>
+                                    <th>状态</th>
+                                    <th>最后扫描</th>
+                                    <th>互联状态</th>
+                                    <th>地址</th>
+                                    <th>操作</th>
+                                </thead>
+                                <tbody>
+                                    <!-- <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch"> -->
+                                    <tr ng-repeat="item in [1,2,3,4,5,6,7,8,9,10]">
+                                    	<td>红山生产</td>
+                                    	<td>ok</td>
+                                    	<td>2017-04-27 14:46:45</td>
+                                    	<td>ok</td>
+                                    	<td>HTTP://218.205.115.199:18000/ZABBIX/API_JSONRPC.PHP</td>
+                                    	<td>
+                                    		<a href="" class="mr10">编辑</a>
+                                    		<a href="" class="mr10">删除</a>
+                                    		<a href="" class="mr10">禁用</a>
+                                    		<a href="">启用</a>
+                                    	</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

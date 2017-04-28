@@ -1,0 +1,465 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>用户列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">权限中心</a></li>
+          <li><a href="#">用户管理</a></li>
+          <li class="active">用户列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li>
+                                    <a href="" id="addButton" data-toggle="modal" data-target="#add" ng-click="add()"><i class="fa fa-user-plus"></i>添加用户</a>
+                                </li>
+                                <li>
+                                    <a href="" id="deleteButton" data-toggle="modal" data-target="#delete" ng-click="delete()"><i class="fa fa-user-times"></i>删除用户</a>
+                                </li>
+                                <li>
+                                    <a href="" id="editButton" data-toggle="modal" data-target="#edit" ng-click="edit()"><i class="fa fa-pencil"></i>编辑用户</a>
+                                </li>
+                                <li>
+                                    <a href="" id="disabledButton" data-toggle="modal" data-target="#disabled" ng-click="disabled()"><i class="fa fa-toggle-off"></i>禁用用户</a>
+                                </li>
+                                <li>
+                                    <a href="" id="abledButton" data-toggle="modal" data-target="#abled" ng-click="abled()"><i class="fa fa-toggle-on"></i>启用用户</a>
+                                </li>
+                                <li>
+                                    <a href="" id="rolesButton" data-toggle="modal" data-target="#roles" ng-click="role()"><i class="fa fa-users"></i>角色管理</a>
+                                </li>
+                                <li class="input-group col-sm-3 pull-right" id="rbac_seacch">
+                                    <input type="text" class="form-control" placeholder="可搜索中文名关键字" ng-model="keyword">
+                                    <div class="input-group-addon" ng-click="search()"><span class="glyphicon glyphicon-search"></span></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered" id="rbacUserTable">
+                                <thead>
+                                    <th class="text-center">选择框</th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>角色</th>
+                                    <th>部门</th>
+                                    <th>状态</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr ng-repeat="row in data" ng-if="loadingSwitch">
+                                        <td class="col-sm-2 text-center">
+                                            <input type="checkbox" value="{{row}}" ng-click="toggleChecked(row.id,row)" ng-checked="isChecked(row.id)">
+                                        </td>
+                                        <td class="col-sm-2">{{ row.name }}</td>
+                                        <td class="col-sm-2">{{ row.cn }}</td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.roleids == undefined">
+                                                未分配角色
+                                            </span>
+                                            <ul ng-show="row.roleids != undefined">
+                                                <li ng-repeat="item in row.roleids.split(',')">{{roles[item].role_name}}</li>
+                                            </ul>
+                                        </td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.group_id==-1">
+                                                未分配组
+                                            </span>
+                                            <span ng-show="row.group_id!=-1">
+                                                {{ groups[row.group_id].name }}
+                                            </span>
+                                        </td>
+                                        <td class="col-sm-2">
+                                            <span ng-show="row.flag == 0">禁用</span>
+                                            <span ng-show="row.flag == 1">启用</span>
+                                            <span ng-show="row.flag == 2">启用</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="bigTotalItems == 0">
+                                        <td colspan="6" id="rbac_search_result" class="text-center">搜索结果不存在</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+<!-- 添加用户 -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="add_roles" class="col-sm-3 control-label">角色</label>
+                        <div class="col-sm-6">
+                            <select id="add_roles" class="selectpicker form-control" multiple data-live-search="false""></select>
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{select_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name" class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="user_name" class="form-control" value="{{userInformation.name}}" ng-model="userInformation.name" placeholder="请输入用户名">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{name_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_pwd" class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-6">
+                            <input type="password" id="user_pwd" class="form-control" value="{{userInformation.pwd}}" ng-model="userInformation.pwd" placeholder="请输入密码">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{pwd_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_cn" class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="user_cn" value="{{userInformation.cn}}" ng-model="userInformation.cn" placeholder="请输入姓名">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{cn_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_group" class="col-sm-3 control-label">部门</label>
+                        <div class="col-sm-6">
+                            <select id="user_group" class="form-control">
+                                <option value="0">----请选择----</option>
+                                <optgroup label="{{department.name}}" ng-repeat="department in departments">
+                                    <option value="{{group.id}}" ng-repeat="group in department.children" ng-selected="group.id==groupChecked">{{group.name}}</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{group_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_email" class="col-sm-3 control-label">电子邮箱</label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control" id="user_email" value="{{userInformation.email}}" ng-model="userInformation.email" placeholder="请输入电子邮箱">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{email_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_phone" class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="user_phone" value="{{userInformation.phone}}" ng-model="userInformation.phone" placeholder="请输入电话">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{phone_msg}}</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="addUpdata()">添加</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closed()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请清除选中用户!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除用户 -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">请确认是否删除以下用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <th>序号</th>
+                                <th>用户名</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in deleteData">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="item2 in item">{{item2.name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="deleteUpdata()">删除</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请选中以下用户!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 编辑用户 -->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">编辑用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="user_name" class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" value="{{editInformation.user.name}}" ng-model="editInformation.user.name">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{name_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_pwd" class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" value="{{editInformation.user.pwd}}" ng-model="editInformation.user.pwd" placeholder="选填:重置密码">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{pwd_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_cn" class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="user_cn" value="{{editInformation.user.cn}}" ng-model="editInformation.user.cn">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{cn_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_department" class="col-sm-3 control-label">部门</label>
+                        <div class="col-sm-6">
+                            <select id="edit_group" class="form-control">
+                                <option value="0">----请选择----</option>
+                                <optgroup label="{{department.name}}" ng-repeat="department in departments">
+                                    <option value="{{group.id}}" ng-repeat="group in department.children" ng-selected="group.id==groupCheckedId">{{group.name}}</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{group_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_email" class="col-sm-3 control-label">电子邮箱</label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control" id="user_email" value="{{editInformation.persinfo.email}}" ng-model="editInformation.persinfo.email">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{email_msg}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_telphone" class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="user_phone" value="{{editInformation.persinfo.phone}}" ng-model="editInformation.persinfo.phone">
+                        </div>
+                        <div class="col-sm-3 text-danger control-label">{{phone_msg}}</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="editUpdata()">更新</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"  ng-click="closed()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">编辑用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请确保选中用户数量为 “一个“！</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 禁用用户 -->
+<div class="modal fade" id="disabled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">请确认是否禁用以下用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <th>序号</th>
+                                <th>用户名</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in disabledData">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="item2 in item">{{item2.name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="disabledUpdata()">禁止</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="disabledError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">禁用用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请选中一个用户!!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 启用用户 -->
+<div class="modal fade" id="abled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">请确认是否启用以下用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <th>序号</th>
+                                <th>用户名</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in abledData">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="item2 in item">{{item2.name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="abledUpdata()">启用</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="abledError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">启用用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请选中一个用户!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 角色管理 -->
+<div class="modal fade" id="roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only ">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">角色管理</h4>
+            </div>
+            <div class="modal-body" style="overflow: inherit;">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="user_list_username" class="col-sm-2 col-sm-offset-1 control-label">用户名</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="user_list_username" ng-model="roleData.username" value="{{roleData.username}}" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_select" class="col-sm-2 col-sm-offset-1 control-label">当前角色</label>
+                        <div class="col-sm-7 ">
+                            <select id="roles_roles" class="selectpicker form-control" multiple data-live-search="false"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_select" class="col-sm-2 col-sm-offset-1 control-label"></label>
+                        <div class="col-sm-7 text-danger text-center">{{updata_role_emsg}}</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-primary" ng-click="roleUpdata()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rolesError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm ">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">角色管理</h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger text-center">请确保选中用户数量为 “一个“！</h4>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>资源权限</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">权限中心</a></li>
+          <li><a href="#">权限管理</a></li>
+          <li class="active">资源权限</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li style="display: none;">
+                                    <a href="" data-toggle="modal" data-target="#addParentRbac"><i class="fa fa-plus"></i>添加父权限</a>
+                                </li>
+                                <li>
+                                    <a href="" ng-click="collapseAll()"><i class="fa fa-folder-o"></i>折叠全部</a>
+                                </li>
+                                <li>
+                                    <a href="" ng-click="expandAll()"><i class="fa fa-folder-open-o"></i>展开全部</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="resourceTree table table-hover table-bordered">
+                                <thead>
+                                    <th>权限名</th>
+                                    <th>权限类别</th>
+                                    <th>备注</th>
+                                    <th style="display: none;">操作</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr class="treegrid-{{item.id}} treegrid-parent-{{item.parent_id}}" ng-repeat="item in data" ng-if="loadingSwitch">
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.type}}</td>
+                                        <td>{{item.remarks}}</td>
+                                        <td class="col-sm-2" style="display: none;">
+                                            <a href="" data-toggle="modal" data-target="#addChildRbac">增加子权限</a>&nbsp;&nbsp;
+                                            <a href="">删除</a>&nbsp;&nbsp;
+                                            <a href="">编辑</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+<!-- 添加父权限 -->
+<div class="modal fade" id="addParentRbac" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加父权限</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="rbac_parent" class="col-sm-2 col-sm-offset-1 control-label">权限名</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="rbac_parent" ng-model="root.name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click = addRoot() data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加子权限 -->
+<div class="modal fade" id="addChildRbac" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加子权限</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="rbac_child" class="col-sm-2 col-sm-offset-1 control-label">权限名</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" id="rbac_child">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,182 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>我的JOB</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">远程管理中心</a></li>
+            <li><a href="#">Jenkins</a></li>
+            <li class="active">我的JOB</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="box">
+                        <div class="box-header">
+                        	<div class="col-sm-4">
+                        		<form class="form-horizontal">
+								  	<div class="form-group">
+									    <label for="label1" class="col-sm-4 control-label">区域主:</label>
+									    <div class="col-sm-8">
+			                                <select id="label1" class="form-control">
+                                                <option>--------</option>
+			                                	<option>红山机房</option>
+			                                	<option>石桥机房</option>
+			                                </select>
+									    </div>
+								  	</div>
+								</form>
+                        	</div>
+                        	<div col-sm-2></div>
+                        	<div class="col-sm-4">
+                        		<form class="form-horizontal">
+								  	<div class="form-group">
+									    <label for="label1" class="col-sm-4 control-label">区域分:</label>
+									    <div class="col-sm-8">
+			                                <select id="label1" class="form-control">
+                                                <option>--------</option>
+			                                	<option>生产区</option>
+			                                	<option>开发区</option>
+			                                	<option>质测区</option>
+			                                </select>
+									    </div>
+								  	</div>
+								</form>
+                        	</div>
+                        </div>
+                        <div class="box-body">
+                            <uib-tabset active="activeJustified" justified="true">
+                                <uib-tab index="0" heading="全部">
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <th class="text-center col-sm-1">序号</th>
+                                            <th class="col-sm-3">任务名</th>
+                                            <th class="col-sm-1">状态</th>
+                                            <th class="col-sm-3">构建</th>
+                                            <th class="col-sm-3">管理</th>
+                                            <th class="col-sm-1">操作</th>
+                                        </thead>
+                                        <tbody>
+                                            <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                            <tr ng-repeat="item in data" ng-if="loadingSwitch">
+                                                <td ng-bind="$index+1" class="text-center"></td>
+                                                <td ng-bind="item.taskname" class="col-sm-3"></td>
+                                                <td ng-bind="item.flag"></td>
+                                                <td class="col-sm-3">
+                                                    <a href="" data-toggle="modal" data-target="#startModal" ng-click="start(item)">启动</a>&nbsp;&nbsp;
+                                                    <a href="" data-toggle="modal" data-target="#stopModal" ng-click="stop(item)">停止</a>&nbsp;&nbsp;
+                                                    <a href="" data-toggle="modal" data-target="#consoleModal" ng-click="console(item)">Console</a>
+                                                </td>
+                                                <td>
+                                                    <a href="">配置信息</a>&nbsp;&nbsp;
+                                                    <a href="">修改</a>
+                                                </td>
+                                                <td>
+                                                    <a href="">更多</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                    <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                                </uib-tab>
+                                <uib-tab index="1" heading="安全产品部视图">安全产品部视图</uib-tab>
+                                <uib-tab index="2" heading="智慧互联视图">智慧互联视图</uib-tab>
+                            </uib-tabset>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" id="nodeOperation">
+                    <div class="box">
+                        <div class="box-header">
+                            <h4 class="text-center">节点操作</h4>
+                        </div>
+                        <div class="box-body">
+                            <a href="" class="btn btn-default btn-block mtb10" data-toggle="modal" data-target="#createJOBModal">创建JOB</a>
+                            <a href="" class="btn btn-default btn-block mtb10">创建VIEW</a>
+                            <a href="" class="btn btn-default btn-block mtb10">节点信息</a>
+                            <a href="" class="btn btn-default btn-block mtb10">队列信息</a>
+                            <a href="" class="btn btn-default btn-block mtb10">取消队列</a>
+                            <a href="" class="btn btn-default btn-block mtb10">插件信息</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+<!-- 启动构建Modal -->
+<div class="modal fade" id="startModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">启动构建</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认启动构建：<span>{{startTaskName}}</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">启动</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 停止构建Modal -->
+<div class="modal fade" id="stopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">停止构建</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认停止构建：<span>{{stopTaskName}}</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger">停止</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- console构建Modal -->
+<div class="modal fade" id="consoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Console输出</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{consoleData}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="copy()">复制</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 创建JOB Modal -->
+<div class="modal fade" id="createJOBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">创建JOB</h4>
+            </div>
+            <div class="modal-body">
+                <label for="JOBname" class="label-control">请输入要创建的JOB名:</label>
+                <input type="text" id="JOBname" class="form-control" ng-model="jobname">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="createJobUpdata()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

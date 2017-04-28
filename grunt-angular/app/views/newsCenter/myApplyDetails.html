@@ -1,0 +1,112 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1 ng-show="operationType == 'edit'">我的申请-编辑</h1>
+        <h1 ng-show="operationType == 'look'">我的申请-查看</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">消息中心</a></li>
+            <li><a href="#">我的消息</a></li>
+            <li class="active">我的申请</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box" id="internetApplication">
+                        <div class="box-header">
+                            <a href="" class="btn btn-primary pull-right ml20" ng-click="back()"><i class="fa fa-reply"></i>&nbsp;返回</a>
+                            <a href="" class="btn btn-primary pull-right" ng-click="add()" ng-if="operationType != 'look'"><i class="fa fa-plus"></i>&nbsp;添加</a>
+                        </div>
+                        <div class="box-body">
+                            <form class="form-horizontal">
+                                <div class="appliction_box" ng-repeat="item in data">
+                                    <div class="row">
+                                        <span class="col-sm-3">
+                                            <label for="environment">环境</label>
+                                            <select id="environment" class="plr10" ng-model="item.env" ng-disabled="disabledSwitch">
+                                                <option value="0" ng-selected="item.env == 0">请选择</option>
+                                                <option value="1" ng-selected="item.env == 1">红山开发区</option>
+                                                <option value="2" ng-selected="item.env == 2">红山生产区</option>
+                                                <option value="2" ng-selected="item.env == 3">红山质测区</option>
+                                                <option value="4" ng-selected="item.env == 4">石桥开发区</option>
+                                                <option value="5" ng-selected="item.env == 5">石桥生产区</option>
+                                            </select>
+                                        </span>
+                                        <span class="col-sm-4">
+                                            <input type="text" name="inIp" placeholder="内网IP" class="ip w120" ng-model="item.in_ip" ng-disabled="disabledSwitch">
+                                            <input type="text" name="inIp_port" placeholder="端口" class="plr10 w70" ng-model="item.in_port" ng-disabled="disabledSwitch" maxlength="5">
+                                            <input type="checkbox" name="inIp_port_anything" ng-model="item.no_in_port" ng-disabled="disabledSwitch">端口不限
+                                        </span>
+                                        <span class="col-sm-5">
+                                            <input type="text" name="outIp" placeholder="外网IP" class="plr10 w120" ng-model="item.out_ip" ng-disabled="disabledSwitch">
+                                            <input type="checkbox" name="outIp_port_auto" ng-model="item.no_out_ip" ng-disabled="disabledSwitch">网工分配
+                                            <input type="text" name="outIp_port" placeholder="端口" class="plr10 w70" ng-model="item.out_port" ng-disabled="disabledSwitch" maxlength="5">
+                                            <input type="checkbox" name="outIp_port_anything" ng-model="item.no_out_port" ng-disabled="disabledSwitch">端口不限
+                                        </span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="col-sm-3 text-danger">
+                                            <span>{{item.env_emsg}}</span>
+                                        </span>
+                                        <span class="col-sm-4 text-danger">
+                                            <span>{{item.in_ip_emsg}}</span>
+                                            <span>{{item.in_port_emsg}}</span>
+                                        </span>
+                                        <span class="col-sm-5 text-danger">
+                                            <span>{{item.out_ip_emsg}}</span>
+                                            <span>{{item.out_port_emsg}}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="result-box" ng-if="operationType == 'look'">
+                                <div class="result-box-header"></div>
+                                <div class="result-box-body">
+                                     <table class="table table-hover table-bordered text-center">
+                                        <thead>
+                                            <th class="col-sm-2">审批人</th>
+                                            <th>批注信息</th>
+                                            <th>审批结果</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in resultContent" ng-show="resultContent.length != 0">
+                                                <td class="col-sm-2">{{ item.processorName }}</td>
+                                                <td class="col-sm-8">{{ item.message }}</td>
+                                                <td class="col-sm-2">{{ item.outcome }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" ng-show="resultContent.length == 0" class="no_processedMessage">暂无审批信息</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <a href="" class="btn btn-primary pull-right" ng-click="updata(1)" ng-if="operationType != 'look'"><i class="fa fa-upload"></i>&nbsp;提交</a>
+                            <a href="" class="btn btn-primary pull-right mr20" ng-click="updata(0)" ng-if="operationType != 'look'"><i class="fa fa-save"></i>&nbsp;保存</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog  modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+      </div>
+      <div class="modal-body text-center text-success">
+        {{ message }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

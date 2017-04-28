@@ -1,0 +1,147 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>机构列表</h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="#">权限中心</a></li>
+            <li><a href="#">机构管理</a></li>
+            <li class="active">机构列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <ul>
+                                <li>
+                                    <a href="" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i>新增部门</a>
+                                </li>
+                                <li>
+                                    <a href="" ng-click="collapseAll()"><i class="fa fa-folder-o"></i>折叠全部</a>
+                                </li>
+                                <li>
+                                    <a href="" ng-click="expandAll()"><i class="fa fa-folder-open-o"></i>展开全部</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-body">
+                            <table class="orgTree table table-hover table-bordered">
+                                <thead>
+                                    <th class="col-sm-6">机构名称</th>
+                                    <th class="col-sm-6">操作</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-if="!loadingSwitch">
+                                    <tr class="treegrid-{{item.id}} treegrid-parent-{{item.parent_id}}" ng-repeat="item in data" ng-if="loadingSwitch">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <a href="" id="deleteButton" data-toggle="modal" data-target="#delete" ng-click="delete(item)">删除</a>&nbsp;&nbsp;
+                                            <a href="" id="editButton" data-toggle="modal" data-target="#edit" ng-click="edit(item)">编辑</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+<!-- 新增部门 -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">新增部门</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="groupname" class="col-sm-2 col-sm-offset-1 control-label">机构名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="groupname" ng-model="addGroup.name" value="{{addGroup.name}}">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_list_username" class="col-sm-2 col-sm-offset-1 control-label">父机构</label>
+                        <div class="col-sm-7">
+                            <select id="selectGroup" class="form-control">
+                                <option value="0">----请选择----</option>
+                                <option value="{{group.id}}" ng-repeat="group in data">{{group.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="addUpdata()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除部门 -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">请确认删除该机构</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="deletGroup" class="col-sm-2 col-sm-offset-1 control-label">机构名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="deletGroup" ng-model="deleteGroup.name" value="{{deleteGroup.name}}">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="deleteUpdata()">删除</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 编辑部门 -->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">编辑部门</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="editname" class="col-sm-2 col-sm-offset-1 control-label">机构名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="editname" ng-model="editGroup.name" value="editGroup.name">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_list_username" class="col-sm-2 col-sm-offset-1 control-label">父机构</label>
+                        <div class="col-sm-7">
+                            <select id="editSelect" class="form-control">
+                                <option value="0">----请选择----</option>
+                                <option value="{{group.id}}" ng-repeat="group in data">{{group.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="editUpdata()">更新</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

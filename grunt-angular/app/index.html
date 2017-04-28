@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" class="login_html">
+<head>
+	<meta charset="UTF-8">
+	<title>登陆</title>
+	<!-- build:css(.) styles/main.css -->
+      	<link rel="stylesheet" href="styles/reset.css">
+		<link rel="stylesheet" href="styles/style.css">
+    <!-- endbuild -->
+</head>
+<body>
+	<div class="form_wrapper">
+		<h2 class="bg-primary">登&nbsp;&nbsp;录</h2>
+		<div class="error_box"></div>
+		<div class="input_box">
+			<input type="text" class="username" placeholder="请输入用户名" autocomplete="off">
+		</div>
+		<div class="input_box">
+			<input type="password" class="password" placeholder="请输入密码" autocomplete="off">
+		</div>
+		<div class="input_box">
+			<button onclick="submitForm()">登录</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script>
+		function submitForm(){
+			var userData = {
+				user: $(".username").val(),
+				pwd: $(".password").val()
+			};
+			if(userData.user == false){
+				$('.error_box').text('请输入用户名!')
+			};
+			if(userData.pwd == false){
+				$('.error_box').text('请输入密码!')
+			};
+			if((userData.user == false) && (userData.pwd == false)){
+				$('.error_box').text('请输入用户名和密码!')
+			};
+			if(userData.user && userData.pwd){
+				$.ajax({
+					url: '/RBAC/api/rbac/v0_1_0/login/',
+					type: 'POST',
+					dataType: 'json',
+					data: JSON.stringify({"auth": null,"action": userData}),
+				   	success: function(result){
+					   	if(result.res.code == 120000){
+						   	sessionStorage.setItem("userName", userData.user);
+						   	sessionStorage.setItem("token", result.res.data.token);
+						   	sessionStorage.setItem("persinfo", JSON.stringify(result.res.data.persinfo));
+					   		window.location.href = "home.html";
+					   	}else if(result.res.code == 220031){
+					   		$('.error_box').text(result.res.mes);
+					   	}
+				   	},
+				   	error: function(res) {
+				       console.log("登陆失败");
+				   	}
+				});
+			};
+		};
+	</script>
+	<!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="bower_components/php-date-formatter/js/php-date-formatter.js"></script>
+    <script src="bower_components/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+    <script src="bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
+    <script src="bower_components/AdminLTE/dist/js/app.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <!-- endbuild -->
+</body>
+</html>
