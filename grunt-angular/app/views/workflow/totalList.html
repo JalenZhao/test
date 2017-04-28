@@ -1,0 +1,80 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>流程列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">流程中心</a></li>
+          <li><a href="#">流程管理</a></li>
+          <li class="active">流程列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <div class="col-sm-4 pull-right pr0">
+                                <label class="col-sm-5 text-right filter_label">筛选分类:</label>
+                                <select class="col-sm-7 filter_select" ng-change="dofilter()" ng-model="category">
+                                    <option value="0" ng-selected="category == undefined">-----所有分类-----</option>
+                                    <option ng-repeat="item in categoryList" value={{item.name}} ng-selected="item.name == category">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th class="text-center">序号</th>
+                                    <th>流程名称</th>
+                                    <th>流程分类</th>
+                                    <th>流程进行中实例数</th>
+                                    <th>流程暂停中实例数</th>
+                                    <th>流程已归档实例数</th>
+                                    <th>流程实例总数</th>
+                                    <th>流程创建者</th>
+                                    <th>流程创建时间</th>
+                                    <th>流程图</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-hide="loadingSwitch">
+                                    <tr ng-repeat="item in data">
+                                        <td class="text-center" ng-click="examplesInfo(item.total,item.category,item.name)">{{$index+1}}</td>
+                                        <td ng-bind="item.name" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.category" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.uncount" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.sucount" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.donecount" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.total" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.creator" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td ng-bind="item.deploymentTime | date:'yyyy-MM-dd HH:mm:ss'" ng-click="examplesInfo(item.total,item.category,item.name)"></td>
+                                        <td>
+                                            <a href="" ng-click="workflowImg(item.pdid)">查看</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="workflowModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">流程图</h4>
+      </div>
+      <div class="modal-body">
+            <img src={{imgUrl}} style="width: 100%;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

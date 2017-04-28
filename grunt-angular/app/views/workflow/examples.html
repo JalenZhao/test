@@ -1,0 +1,108 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>实例列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">流程中心</a></li>
+          <li><a href="#">流程管理</a></li>
+          <li class="active">实例列表</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <a href="" class="btn btn-primary pull-right" ng-click="back()"><i class="fa fa-reply"></i>&nbsp;返回</a>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th>分类</th>
+                                    <th>实例名称</th>
+                                    <th>申请时间</th>
+                                    <th>状态</th>
+                                    <th>耗时(h)</th>
+                                    <th>操作</th>
+                                </thead>
+                                <tbody>
+                                    <img src="../images/loading.gif" id="loadingImg" ng-hide="loadingSwitch">
+                                    <tr ng-repeat="item in data">
+                                        <td ng-bind="item.category"></td>
+                                        <td ng-bind="item.deployname"></td>
+                                        <td ng-bind="item.starttime | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                                        <td>
+                                            <span ng-show="item.endtime == underfined">处理中</span>
+                                            <span ng-show="item.endtime != underfined">已归档</span>
+                                        </td>
+                                        <td ng-bind="item.dutime/3600000 | number:2"></td>
+                                        <td>
+                                            <a href="" class="mr10" ng-click="details(item.formid,item.psid)">详情</a>
+                                        	<a href="" class="mr10" ng-click="monitor(item.psid)" ng-show="item.endtime == underfined">监控</a>
+                                        	<a href="" class="mr10" ng-click="pause(item.psid)" ng-show="item.endtime == underfined && item.suspended == false">暂停</a>
+                                            <a href="" class="mr10" ng-click="activate(item.psid)" ng-show="item.endtime == underfined && item.suspended == true">激活</a>
+                                        	<a href="" class="mr10" ng-click="deleteModal(item.psid)" ng-show="item.endtime != underfined">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+<!-- 监控Modal -->
+<div class="modal fade" id="monitorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">流程监控</h4>
+      </div>
+      <div class="modal-body">
+        	<img src={{imgUrl}} style="width: 100%;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 暂停/激活Modal -->
+<div class="modal fade" id="promptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+      </div>
+      <div class="modal-body text-center">
+            {{resultMessage}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 删除Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+      </div>
+      <div class="modal-body text-center">
+            是否删除该信息
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" ng-click="delete()">删除</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

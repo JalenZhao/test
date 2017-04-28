@@ -1,0 +1,40 @@
+<div class="wrapper">
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="treeview">
+                    <a href="javascript:;">
+                        <i class="fa fa-dashboard"></i> <span>流程管理</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="treeview">
+                            <a href="javascript:;">
+                                <i class="fa fa-dashboard"></i> <span>流程列表</span>
+                                <span class="pull-right-container">
+                                  <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a ui-sref="workflow.total_list"><i class="fa fa-circle-o"></i>流程列表</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </aside>
+    <!-- 右侧vie层和footer -->
+    <div class="content-wrapper">
+        <div ui-view class="view"></div>
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 0.1.0
+            </div>
+            <div id="span_debug"></div>
+            <strong>Copyright © 2016-2025 <a href="http://hy.10086.cn/">中移(杭州)信息技术有限公司</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+</div>

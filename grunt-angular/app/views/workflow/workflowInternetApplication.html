@@ -1,0 +1,51 @@
+<div class="content-wrapper" id="content">
+    <section class="content-header">
+        <h1>流程列表</h1>
+        <ol class="breadcrumb pull-right">
+          <li><a href="#">流程中心</a></li>
+          <li><a href="#">流程管理</a></li>
+          <li><a href="#">资源申请</a></li>
+          <li class="active">公网IP申请</li>
+        </ol>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header"></div>
+                        <div class="box-body">
+                            <table class="table table-hover table-bordered text-center">
+                                <thead>
+                                    <th class="text-center">序号</th>
+                                    <th>流程名称</th>
+                                    <th>流程分类</th>
+                                    <th>流程进行中实例数</th>
+                                    <th>流程暂停中实例数</th>
+                                    <th>流程已归档实例数</th>
+                                    <th>流程实例总数</th>
+                                    <th>流程创建者</th>
+                                    <th>流程创建时间</th>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in data" ng-click="examplesInfo(item.total,item.id)">
+                                        <td class="text-center">{{$index+1}}</td>
+                                        <td ng-bind="item.name"></td>
+                                        <td ng-bind="item.classify"></td>
+                                        <td ng-bind="item.processInstanceCount"></td>
+                                        <td ng-bind="item.supentProcessInstanceCount"></td>
+                                        <td ng-bind="item.hisProcessInstanceCount"></td>
+                                        <td ng-bind="item.processInstanceTotalCount"></td>
+                                        <td ng-bind="item.creater.name"></td>
+                                        <td ng-bind="item.deploymentTime | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                            <ul uib-pagination previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="pageSize" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm pull-right" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+                        </div>
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
